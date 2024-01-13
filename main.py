@@ -4,6 +4,7 @@ import numpy as np
 from matplotlib import cm
 from more_itertools import locate
 import copy
+import random
 
 view = {
 	"class_name" : "ViewTrajectory",
@@ -70,10 +71,6 @@ def main():
         point_cloud_downsampled = point_cloud.voxel_down_sample(voxel_size=0.05)
 
 
-        # # o3d.io.write_point_cloud('factory_no_floor.ply',point_cloud_outliers)
-
-        
-
         # -----
         # Execution
         # -----
@@ -84,6 +81,8 @@ def main():
         point_cloud_downsampled.orient_normals_to_align_with_direction(orientation_reference=np.array([0, 0, -1]))
 
         point_cloud_downsampled.paint_uniform_color([0.2,0.2,0.2])
+
+        # Rotate frame and tr
 
         # Create trnaformation T1 only with rotation
         T1 = np.zeros((4,4),dtype=float)
@@ -175,6 +174,7 @@ def main():
                                                         print_progress=True)
         
         groups_idxs = list(set(labels)) # gives a list of the values in the labels list
+        print(groups_idxs)
         groups_idxs.remove(-1) # remove last group because is the group of unassigned points
         num_groups = len(groups_idxs)
         colormap = cm.Pastel1(range(0, num_groups))
@@ -192,7 +192,7 @@ def main():
 
         groups_width = []
         groups_center = o3d.geometry.PointCloud()
-        table_group = None
+
         for i in groups_idxs:
                 x = []
                 y = []
@@ -227,7 +227,10 @@ def main():
                 point = np.array([x_center, y_center, z_center])
 
                 groups_width.append(np.array([width_x, width_y]))
+
                 groups_center.points.append(point)
+
+        groups_center.paint_uniform_color([0,0,1])
 
     
         # find floor center point
@@ -239,6 +242,8 @@ def main():
                   floor_point = point
              elif point[2] < floor_point[2]:
                   floor_point = point
+
+
  
         table_center = o3d.geometry.PointCloud()
         for idx in range(0,len(groups_center.points)):
@@ -247,26 +252,18 @@ def main():
              y = point[1]
              z = point[2]
              
-             if floor_point[0]-1 < x < floor_point[0]+1 and floor_point[1]-1< y <floor_point[1]+1.5 and z < floor_point[2] + 1:
+             if floor_point[0]-1 < x < floor_point[0]+1 and floor_point[1]-1< y <floor_point[1]+1 and z < floor_point[2] + 1:
                   if floor_point[0] != x and floor_point[1] != y and floor_point[2] != z: 
                      table_center.points.append(point)
-
-        table_center.paint_uniform_color([0,0,1])
-        print(table_center)
-   
-        # print(groups_width)
-        # table_group.paint_uniform_color([0,1,0])
-        table_center.paint_uniform_color([1,0,0])
-
 
         # Ex3 - Create crop the points in the table
         # Create a vector3d with the points in the boundingbox
         np_vertices = np.ndarray((8, 3), dtype=float)
 
-        sx = table_center.points[0][0] + 0.7
-        sy = table_center.points[0][1] + 0.7
+        sx = table_center.points[0][0] + 0.8
+        sy = table_center.points[0][1] + 0.8
         sz_top = table_center.points[0][2] + 0.5
-        sz_bottom = table_center.points[0][2] - 0.1
+        sz_bottom = table_center.points[0][2] - 0.03
         np_vertices[0, 0:3] = [sx, sy, sz_top]
         np_vertices[1, 0:3] = [sx, -sy, sz_top]
         np_vertices[2, 0:3] = [-sx, -sy, sz_top]
@@ -282,8 +279,6 @@ def main():
 
         # Create a bounding box
         bbox = o3d.geometry.AxisAlignedBoundingBox.create_from_points(vertices)
-        # print(bbox)
-
 
         # Crop the original point cloud using the bounding box
         pcd_cropped = point_cloud.crop(bbox)
@@ -291,7 +286,10 @@ def main():
         pcd_cropped.paint_uniform_color([1,0,0])
         o3d.io.write_point_cloud('table_objects.ply',pcd_cropped)
 
-
+        print('Centers')
+        print(groups_center)
+        print('Table center')
+        print(table_center)
 
 
         # -----
@@ -301,8 +299,12 @@ def main():
 
 
         entities = [point_cloud_downsampled]
+        # entities.append(point_cloud_horizontal)
+        entities.extend(group_point_clouds)
+        entities.append(groups_center)
         entities.append(pcd_cropped) 
         entities.append(table_center)
+        entities.append(frame)
 
         o3d.visualization.draw_geometries(entities,
                                         zoom=view['trajectory'][0]['zoom'],
