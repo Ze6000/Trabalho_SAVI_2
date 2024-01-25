@@ -31,7 +31,7 @@ def main():
     # Prepare Datasets
     # -----------------------------------------------------------------
 
-    with open('../Ex0_split_dataset/dataset_filenames.json', 'r') as f:
+    with open('../Split_dataset/dataset_filenames.json', 'r') as f:
         # Reading from json file
         dataset_filenames = json.load(f)
 
