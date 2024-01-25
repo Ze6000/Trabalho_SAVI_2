@@ -14,14 +14,18 @@ class Dataset(torch.utils.data.Dataset):
         self.number_of_images = len(self.filenames)
 
         # Compute the corresponding labels
-        # self.labels should be like ['cat', 'dog', 'cat'], but we will use [1, 0, 1] because of pytorch
+        # self.labels should be like ['apple', 'keyboard', 'sponge'], but we will use [0, 2, 5] because of pytorch
         self.labels = []
         self.current_label = 0
         self.label_dict = []
         for filename in self.filenames:
             basename = os.path.basename(filename)
-            blocks = basename.split('.')
-            label = blocks[0]  # because basename is "cat.2109.jpg"
+            blocks = basename.split('_')
+            
+            if len(blocks) == 5:
+                label = blocks[0]  # because basename is "sponge_10_4_34_crop.png"      
+            else:
+                label = blocks[0] + ' ' + blocks[1] #because some base names are like food_can_13_1_200_crop.png
 
             if label in self.label_dict:
                 self.labels.append( self.label_dict.index(label))
@@ -32,13 +36,18 @@ class Dataset(torch.utils.data.Dataset):
                 self.current_label += 1
                 
 
-        print(self.filenames[0:10])
-        print(self.labels[0:10])
-        print(self.label_dict [0:10])
-        # filenames ['/home/jose/Desktop/train/dog.12026.jpg', '/home/jose/Desktop/train/cat.10739.jpg', '/home/jose/Desktop/train/dog.5728.jpg']
-        # labels ['0', '1', '0']
+        # print(self.filenames[0:1])
+        # print(self.labels[0:15])
+        # print(len(self.label_dict))
+        # print(self.label_dict)
+        # filenames ['/home/jose/Desktop/rgbd-dataset/bowl/bowl_3/bowl_3_4_4_crop.png', '/home/jose/Desktop/rgbd-dataset/food_bag/food_bag_8/food_bag_8_4_138_crop.png']
+        # labels [0, 1, 2, 2, 3, 4, 5, 6, 7, 5, 8, 9, 1, 5, 10]
+        # label_dict lengh 51
+        # label_dict ['bowl', 'food bag', 'orange', 'toothbrush', 'food can', 'onion', 'lightbulb', 'bell pepper', 'sponge', 'potato', 'banana', 'lemon', 'soda can', 'peach', 'food box', 'notebook', 'kleenex', 'flashlight', 'stapler', 'keyboard', 'glue stick', 'cap', 'marker', 'comb', 'instant noodles', 'lime', 'plate', 'dry battery', 'cell phone', 'toothpaste', 'food cup', 'garlic', 'apple', 'coffee mug', 'water bottle', 'hand towel', 'mushroom', 'scissors', 'pliers', 'tomato', 'food jar', 'calculator', 'pear', 'shampoo', 'rubber eraser', 'ball', 'camera', 'pitcher', 'greens', 'cereal box', 'binder']
 
-        self.transforms = transforms.Compose([
+
+        #TODO Maybe add some other transformations to reduce overfiting
+        self.transforms = transforms.Compose([      
             transforms.Resize((224, 224)),
             transforms.ToTensor()
         ])

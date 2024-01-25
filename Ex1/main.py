@@ -38,8 +38,9 @@ def main():
     train_filenames = dataset_filenames['train_filenames']
     validation_filenames = dataset_filenames['validation_filenames']
 
-    train_filenames = train_filenames[0:1000]
-    validation_filenames = validation_filenames[0:200]
+    #Reducing number os files to test code
+    train_filenames = train_filenames[0:20000]
+    validation_filenames = validation_filenames[0:5000]
 
     print('Used ' + str(len(train_filenames)) + ' for training and ' + str(len(validation_filenames)) +
           ' for validation.')
@@ -51,9 +52,10 @@ def main():
     train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
     validation_loader = torch.utils.data.DataLoader(dataset=validation_dataset, batch_size=batch_size, shuffle=True)
 
-    # Just for testing the train_loader
+   
     tensor_to_pil_image = transforms.ToPILImage()
 
+# Just for testing the train_loader
 #     for batch_idx, (inputs, labels) in enumerate(train_loader):
 #         print('batch_idx = ' + str(batch_idx))
 #         print('inputs shape = ' + str(inputs.shape))

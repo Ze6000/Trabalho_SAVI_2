@@ -27,8 +27,8 @@ class Trainer():
         print(Fore.BLUE + 'Device is ' + self.device + Style.RESET_ALL)
 
         # Setup matplotlib figure
-        plt.title('Training Cats vs Dogs', fontweight="bold")
-        plt.axis([0, self.num_epochs, 0, 1])
+        plt.title('Where is my mug?', fontweight="bold")
+        plt.axis([0, self.num_epochs, 0, 30])
         plt.xlabel('Epoch')
         plt.ylabel('Loss')
         self.handle = None
@@ -87,7 +87,7 @@ class Trainer():
         for epoch_idx in range(start_epoch, self.num_epochs):
             print('Starting to train epoch ' + str(epoch_idx))
 
-            # Train --------------------------------------------
+            # Train --------------------------------------------                #TODO   Does this train and loss computation work in non-binary scenarios??
             self.model.train()
             batch_losses = []
             for batch_idx, (inputs, labels_gt) in tqdm(enumerate(self.train_loader),
@@ -149,7 +149,6 @@ class Trainer():
             print('epoch_train_loss = ' + str(epoch_train_loss))
             print('epoch_validation_loss = ' + str(epoch_validation_loss))
 
-            # TODO Save to disk. Decide when we should save?
             self.saveModel(model=self.model,
                            optimizer=self.optimizer,
                            epoch_idx=epoch_idx,

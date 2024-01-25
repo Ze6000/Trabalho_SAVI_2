@@ -10,6 +10,8 @@ from PIL import Image
 
 class Model(nn.Module):
 
+    #TODO change module to more than 2 categories
+
     def __init__(self):
         super().__init__()
 
@@ -37,10 +39,12 @@ class Model(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(2)
         )
+        
+
 
         self.fc1 = nn.Linear(3*3*64, 10)
         self.dropout = nn.Dropout(0.5)
-        self.fc2 = nn.Linear(10, 2)
+        self.fc2 = nn.Linear(10, 51)
         self.relu = nn.ReLU()
 
     def forward(self, x):
