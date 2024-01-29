@@ -24,6 +24,7 @@ class Trainer():
         self.optimizer = torch.optim.Adam(params=self.model.parameters(), lr=learning_rate)
 
         self.device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+        #self.device = 'cpu'
         print(Fore.BLUE + 'Device is ' + self.device + Style.RESET_ALL)
 
         # Setup matplotlib figure

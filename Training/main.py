@@ -18,7 +18,7 @@ def main():
     # -----------------------------------------------------------------
     # Hyperparameters initialization
     # -----------------------------------------------------------------
-    batch_size = 100
+    batch_size = 500
     learning_rate = 0.001
     num_epochs = 50
 
