@@ -8,7 +8,7 @@ from dataset import Dataset
 import torch
 from torchvision import transforms
 import matplotlib.pyplot as plt
-
+import numpy as np
 from model import Model
 from trainer import Trainer
 
@@ -22,7 +22,7 @@ def main():
     # -----------------------------------------------------------------
     learning_rate = 0.001
     num_epochs = 50
-
+    batch_size = 500
     # -----------------------------------------------------------------
     # Create model
     # -----------------------------------------------------------------
@@ -31,18 +31,18 @@ def main():
     # -----------------------------------------------------------------
     # Prepare Datasets
     # -----------------------------------------------------------------
-    with open('../Ex0_split_dataset/dataset_filenames.json', 'r') as f:
+    with open('../Split_dataset/dataset_filenames.json', 'r') as f:
         # Reading from json file
         dataset_filenames = json.load(f)
 
     test_filenames = dataset_filenames['test_filenames']
-    test_filenames = test_filenames[0:100]
+    # test_filenames = test_filenames[0:1000]
 
     print('Used ' + str(len(test_filenames)) + ' for testing ')
 
     test_dataset = Dataset(test_filenames)
 
-    batch_size = len(test_filenames)
+    # batch_size = len(test_filenames)
     test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
 
     # Just for testing the train_loader
@@ -70,47 +70,47 @@ def main():
         # Get predicted labels
         labels_predicted = model.forward(inputs)
 
+    # Getting rid of the device part and transform into numbers
+    labels_gt_np = labels_gt.cpu().detach().numpy() 
+
     # Transform predicted labels into probabilities
     predicted_probabilities = F.softmax(labels_predicted, dim=1).tolist()
-    # print(predicted_probabilities)
+    # print(labels_gt_np)
 
     probabilities_dog = [x[0] for x in predicted_probabilities]
 
-    # print(probabilities_dog)
+    # Take probabilities and find the predict label
+    predict_label = [sublist.index(max(sublist)) for sublist in predicted_probabilities]
+    # print(predict_label)
+    # print(len(predict_label))
 
-    # Make a decision using the largest probability
-    predicted_is_dog = [x > 0.5 for x in probabilities_dog]
-    print('predicted_is_dog=' + str(predicted_is_dog))
 
-    labels_gt_np = labels_gt.cpu().detach().numpy()
-    ground_truth_is_dog = [x == 0 for x in labels_gt_np]
-    print('ground_truth_is_dog=' + str(ground_truth_is_dog))
-
-    # labels_predicted_np = labels_predicted.cpu().detach().numpy()
-    # print('labels_gt_np = ' + str(labels_gt_np))
-    # print('labels_predicted_np = ' + str(labels_predicted_np))
-
-    # Count FP, FN, TP, and TN
-    TP, FP, TN, FN = 0, 0, 0, 0
-    for gt, pred in zip(ground_truth_is_dog, predicted_is_dog):
-
-        if gt == 1 and pred == 1:  # True positive
-            TP += 1
-        elif gt == 0 and pred == 1:  # False positive
-            FP += 1
-        elif gt == 1 and pred == 0:  # False negative
-            FN += 1
-        elif gt == 0 and pred == 0:  # True negative
-            TN += 1
-
-    print('TP = ' + str(TP))
-    print('TN = ' + str(TN))
-    print('FP = ' + str(FP))
-    print('FN = ' + str(FN))
+    # Creat a classification matrix
+    result_matrix = np.zeros((51,51))
+    for col, line in zip(predict_label, labels_gt_np):
+        result_matrix[line][col] += 1
+    
+    
+    # Saving the matrix to see the results better
+    np.savetxt('matrix.txt', result_matrix, fmt='%d')
 
     # Compute precision and recall
-    precision = TP / (TP + FP)
-    recall = TP / (TP + FN)
+    precision_list = []
+    recall_list = []
+
+    for i in range(result_matrix.shape[0]):
+        element = result_matrix[i, i]
+        TP_FP_sum = np.sum(result_matrix[:, i])
+        TP_FN_sum = np.sum(result_matrix[i, :])
+
+        result_precision = element / TP_FP_sum if TP_FP_sum != 0 else 0
+        result_recall = element / TP_FN_sum if TP_FN_sum != 0 else 0
+        
+        precision_list.append(result_precision)
+        recall_list.append(result_recall)
+ 
+    precision = np.mean(precision_list)
+    recall = np.mean(recall_list)
     f1_score = 2 * (precision*recall)/(precision+recall)
 
     print('Precision = ' + str(precision))
@@ -121,46 +121,45 @@ def main():
     # inputs = inputs.cpu().detach()
     # print(inputs)
 
-    fig = plt.figure()
-    idx_image = 0
-    for row in range(4):
-        for col in range(4):
-            image_tensor = inputs[idx_image, :, :, :]
-            image_pil = tensor_to_pil_image(image_tensor)
-            print('ground_truth is dog = ' + str(ground_truth_is_dog[idx_image]))
-            print('predicted is dog = ' + str(predicted_is_dog[idx_image]))
+    # fig = plt.figure()
+    # idx_image = 0
+    # for row in range(4):
+    #     for col in range(4):
+    #         image_tensor = inputs[idx_image, :, :, :]
+    #         image_pil = tensor_to_pil_image(image_tensor)
+    #         print('ground_truth is dog = ' + str(ground_truth_is_dog[idx_image]))
+    #         print('predicted is dog = ' + str(predicted_is_dog[idx_image]))
 
-            ax = fig.add_subplot(4, 4, idx_image+1)
-            plt.imshow(image_pil)
-            ax.xaxis.set_ticklabels([])
-            ax.yaxis.set_ticklabels([])
-            ax.xaxis.set_ticks([])
-            ax.yaxis.set_ticks([])
+    #         ax = fig.add_subplot(4, 4, idx_image+1)
+    #         plt.imshow(image_pil)
+    #         ax.xaxis.set_ticklabels([])
+    #         ax.yaxis.set_ticklabels([])
+    #         ax.xaxis.set_ticks([])
+    #         ax.yaxis.set_ticks([])
 
-            text = 'GT '
-            if ground_truth_is_dog[idx_image]:
-                text += 'is dog'
-            else:
-                text += 'is not dog'
+    #         text = 'GT '
+    #         if ground_truth_is_dog[idx_image]:
+    #             text += 'is dog'
+    #         else:
+    #             text += 'is not dog'
 
-            text += '\nPred '
-            if predicted_is_dog[idx_image]:
-                text += 'is dog'
-            else:
-                text += 'is not dog'
+    #         text += '\nPred '
+    #         if predicted_is_dog[idx_image]:
+    #             text += 'is dog'
+    #         else:
+    #             text += 'is not dog'
 
-            if ground_truth_is_dog[idx_image] == predicted_is_dog[idx_image]:
-                color = 'green'
-            else:
-                color = 'red'
+    #         if ground_truth_is_dog[idx_image] == predicted_is_dog[idx_image]:
+    #             color = 'green'
+    #         else:
+    #             color = 'red'
 
-            ax.set_xlabel(text, color=color)
+    #         ax.set_xlabel(text, color=color)
 
-            idx_image += 1
-
-    plt.show()
-
+    #         idx_image += 1
 
     # plt.show()
+
+
 if __name__ == "__main__":
     main()

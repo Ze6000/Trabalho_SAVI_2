@@ -10,7 +10,6 @@ from PIL import Image
 
 class Model(nn.Module):
 
-    #TODO change module to more than 2 categories
 
     def __init__(self):
         super().__init__()

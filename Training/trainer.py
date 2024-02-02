@@ -111,7 +111,6 @@ class Trainer():
                 self.optimizer.step()
 
                 # Store batch loss
-                # TODO should we not normalize the batch_loss by the number of images in the batch?
                 batch_losses.append(batch_loss.data.item())
                 # print('batch_idx ' + str(batch_idx) + ' loss = ' + str(batch_loss.data.item()))
 
