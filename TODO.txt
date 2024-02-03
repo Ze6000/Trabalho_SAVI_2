@@ -1,0 +1,39 @@
+1. Separate table point cloud, including the objects above it, from the rest of the point cloud
+    - Find table plane
+        - Find all horizontal planes
+        - Find their center points
+        - Find floor plane - largest
+        - Find center point closest to floor center (at lest 1m above it) - table center point
+        - Table plane = plane to which that point belongs to
+    - Create Bounding Box arround it
+        - Create a bounding box arround the table center point in which the objects are included
+    - Cropp bounding box from original point cloud
+        - Create a table point cloud = points included in the bounding box 
+
+2. Separate each object from the table
+    - Separate objects from table
+    - Cluster objects
+    - Save each object point cloud
+
+3. Project the objects in rgb image
+    - Get the images taken from that scenario
+    - Get the camera pose and orientation for each image
+    - Project point cloud points by the camera's pose and orientation in the rbg image
+
+4. Extract object image
+    - Create a bounding box arround each projected object
+    - Extract the piece of image within the object's bounding box
+
+
+Class scnerio:
+- Scenario point cloud
+- Table point cloud
+- Each object point cloud
+
+Class object:
+ - Object point cloud
+ - Properties: hight, width and color
+ - Center point (projected)
+ - Draw bounding box feature
+
+
