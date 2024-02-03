@@ -5,6 +5,7 @@ from matplotlib import cm
 from more_itertools import locate
 import copy
 import random
+import os
 
 view = {
 	"class_name" : "ViewTrajectory",
@@ -45,25 +46,16 @@ class PlaneSegmentation():
 
 def main():
 
+    scenarios = os.listdir('Scenarios')
 
-    # scenes_idx = ['01', '02','03','04','05','06','07','08','09','10','11','12','13','14']
-    # for scene_idx in range(0,13): 
-    #     # --------------------------------------
-    #     # Initialization
-    #     # --------------------------------------
-    #     scene_name = scenes_idx[scene_idx]
-    #     point_cloud = o3d.io.read_point_cloud('Scenes/' + scene_name + '.ply')
-    # o3d.io.write_point_cloud("scene_01.pcd", point_cloud)
+    scenarios_point_clouds = [scenario for scenario in scenarios if scenario.endswith('.ply')]
+
+    for scenario in scenarios_point_clouds:
         
-        point_cloud = o3d.io.read_point_cloud('Scenes/09.ply')
+        print(scenario)
         
-
-
-
-    # print(point_cloud)
-
-    
-    
+        point_cloud = o3d.io.read_point_cloud('Scenes/' + scenario)
+        scenario_num = scenario.split('.')[0]
 
         # --------------------------------------
         # Downsampling
@@ -93,9 +85,7 @@ def main():
         # Add null rotation
         R = point_cloud_downsampled.get_rotation_matrix_from_xyz((110*math.pi/180, 0, 40*math.pi/180))
         T1[0:3, 0:3] = R
-        # T[0:3, 0] = [1, 0, 0]  # add n vector
-        # T[0:3, 1] = [0, 1, 0]  # add s vector
-        # T[0:3, 2] = [0, 0, 1]  # add a vector
+
 
         # Add a translation
         T1[0:3, 3] = [0, 0, 0]
@@ -147,9 +137,9 @@ def main():
             # get angle betwwen the normal vector and z axis
             theta =  math.acos(np.dot(normal, z_axis)/norm_normal*norm_z_axis)
             # print('Vector: ' + str(normal))
-            print('Theta: ' + str(theta))
+            # print('Theta: ' + str(theta))
             delta= theta*180/math.pi
-            print('Delta: ' + str(delta))
+            # print('Delta: ' + str(delta))
     
             # keep points where angle to z_axis is small enough
             if delta < 20: # we have a point that belongs to an horizonta surface
@@ -159,12 +149,6 @@ def main():
                 point_cloud_horizontal.points.append(color)
 
         point_cloud_horizontal.paint_uniform_color([0,0,1])
-
-
-        
-
-        
-
 
         # --------------------------------------
         # Clustering
@@ -283,8 +267,14 @@ def main():
         # Crop the original point cloud using the bounding box
         pcd_cropped = point_cloud.crop(bbox)
 
+        point_cloud_folder = str(scenario_num) + '_Scenario'
+        os.makedirs(point_cloud_folder)
+
+        point_cloud_path = point_cloud_folder + '/' + str(scenario_num) + '_table_objects.ply'
+        # print(point_cloud_path)
+        # exit(0)
         pcd_cropped.paint_uniform_color([1,0,0])
-        o3d.io.write_point_cloud('table_objects.ply',pcd_cropped)
+        o3d.io.write_point_cloud(point_cloud_path,pcd_cropped)
 
         print('Centers')
         print(groups_center)

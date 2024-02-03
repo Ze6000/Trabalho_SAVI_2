@@ -49,24 +49,24 @@ def main():
         # --------------------------------------
         # Downsampling
         # --------------------------------------
-        point_cloud_downsampled = point_cloud.voxel_down_sample(voxel_size=0.02)
-        point_cloud_downsampled.paint_uniform_color([0.2,0.2,0.2])
+     #    point_cloud_downsampled = point_cloud.voxel_down_sample(voxel_size=0.02)
+     #    point_cloud_downsampled.paint_uniform_color([0.2,0.2,0.2])
 
         # Remove table plane
-        plane_model, inliers_idx = point_cloud_downsampled.segment_plane(distance_threshold=0.025,
+        plane_model, inliers_idx = point_cloud.segment_plane(distance_threshold=0.025,
                                          ransac_n=3,
                                          num_iterations=100)
         a,b,c,d = plane_model
 
-        point_cloud_table = point_cloud_downsampled.select_by_index(inliers_idx, invert = False)
+        point_cloud_table = point_cloud.select_by_index(inliers_idx, invert = False)
         point_cloud_table.paint_uniform_color([1,0,0])
 
-        point_cloud_objects = point_cloud_downsampled.select_by_index(inliers_idx, invert = True)
+        point_cloud_objects = point_cloud.select_by_index(inliers_idx, invert = True)
        
         # --------------------------------------
         # Clustering
         # --------------------------------------
-        objects =  point_cloud_objects.cluster_dbscan(eps=0.1,
+        objects =  point_cloud_objects.cluster_dbscan(eps=0.03,
                                                         min_points=10,
                                                         print_progress=True)
         
@@ -149,7 +149,7 @@ def main():
         # -----
         frame = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
 
-        entities = [point_cloud_downsampled]
+        entities = [point_cloud]
         entities.append(point_cloud_table)
         entities.extend(group_point_clouds)
 
