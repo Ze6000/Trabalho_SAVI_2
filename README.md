@@ -27,24 +27,24 @@ Vídeo ilustrativo do funcionamento do programa
 Para a criação deste programa, recorreu-se à utilização de algumas bibliotecas. Estas serão brevemente explicadas abaixo.
 
 - **Open3D**
+  - Descrição: Open3D é uma biblioteca de código aberto, com a interface de software sofisticada para a implementação de dados 3D. 
+  - Instalação:
+    ```bash
+    pip install open3d 
+    ```
+
+- ** Opens CV **
   - Descrição: OpenCV é uma biblioteca que existe em Python desenhada para resolver problemas de _computer vision_. 
   - Instalação:
     ```bash
     sudo apt-get install python3-opencv
     ```
 
-- ** Opens CV **
-  - Descrição: Biblioteca de Python com comandos para reconhecer e manipular caras criada com modelos baseados em _deep learning_. 
-  - Instalação:
-    ```bash
-    pip3 install face_recognition
-    ```
-
 - ** TQDME **
-  - Descrição: Esta é uma biblioteca de Python para fazer conversão de texto para voz, funcionando _offline_ e sendo compatível com Python 2 e 3.
+  - Descrição: Esta é uma biblioteca de Python para adicionar barra de progresso..
   - Instalação:
     ```bash
-    pip install pyttsx3
+    pip install tqdm
     ```
 
 - ** Pytorch **
@@ -53,8 +53,11 @@ Para a criação deste programa, recorreu-se à utilização de algumas bibliote
    
   
 - ** scikit-learn **
-  - Descrição: Esta bibioteca permite introduzir uma sequência de intruções num programa que podem ser executadas independentemente do restante processo.
-  - Instalação: pip install -U scikit-learn
+  - Descrição: Esta bibioteca também conhecida como sklearn permite implementar modelos de aprendizado de máquina e modelagem estatística.
+  - Instalação:
+    ```bash
+    pip install -U scikit-learn
+    ```
 
 ---
 ## Instalação
