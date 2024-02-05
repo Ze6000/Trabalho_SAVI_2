@@ -26,33 +26,33 @@ Vídeo ilustrativo do funcionamento do programa
 
 Para a criação deste programa, recorreu-se à utilização de algumas bibliotecas. Estas serão brevemente explicadas abaixo.
 
-- ** Open3D **
+- **Open3D**
   - Descrição: Open3D é uma biblioteca de código aberto, com a interface de software sofisticada para a implementação de dados 3D. 
   - Instalação:
     ```bash
     pip install open3d 
     ```
 
-- ** Opens CV **
+- **Opens CV**
   - Descrição: OpenCV é uma biblioteca que existe em Python desenhada para resolver problemas de _computer vision_. 
   - Instalação:
     ```bash
     sudo apt-get install python3-opencv
     ```
 
-- ** TQDME **
+- **Tqdme**
   - Descrição: Esta é uma biblioteca de Python para adicionar barra de progresso..
   - Instalação:
     ```bash
     pip install tqdm
     ```
 
-- ** Pytorch **
+- **Pytorch**
   - Descrição: Esta bibioteca permite introduzir uma sequência de intruções num programa que podem ser executadas independentemente do restante processo.
   - Instalação: https://pytorch.org/get-started/locally/
    
   
-- ** scikit-learn **
+- **scikit-learn**
   - Descrição: Esta bibioteca também conhecida como sklearn permite implementar modelos de aprendizado de máquina e modelagem estatística.
   - Instalação:
     ```bash
