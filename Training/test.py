@@ -10,8 +10,6 @@ from torchvision import transforms
 import matplotlib.pyplot as plt
 import numpy as np
 from model import Model
-from trainer import Trainer
-
 import torch.nn.functional as F
 
 
@@ -20,8 +18,6 @@ def main():
     # -----------------------------------------------------------------
     # Hyperparameters initialization
     # -----------------------------------------------------------------
-    learning_rate = 0.001
-    num_epochs = 50
     batch_size = 500
     # -----------------------------------------------------------------
     # Create model
@@ -41,11 +37,8 @@ def main():
     print('Used ' + str(len(test_filenames)) + ' for testing ')
 
     test_dataset = Dataset(test_filenames)
-
     test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
 
-    # Just for testing the train_loader
-    tensor_to_pil_image = transforms.ToPILImage()
 
     # -----------------------------------------------------------------
     # Prediction
@@ -53,13 +46,13 @@ def main():
 
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
+
     # Load the trained model
     checkpoint = torch.load('models/checkpoint.pkl')
     model.load_state_dict(checkpoint['model_state_dict'])
 
     model.to(device)
     model.eval()  # we are in testing mode
-    batch_losses = []
     for batch_idx, (inputs, labels_gt) in enumerate(test_loader):
 
         # move tensors to device
@@ -113,49 +106,6 @@ def main():
     print('Precision = ' + str(precision))
     print('Recall = ' + str(recall))
     print('F1 score = ' + str(f1_score))
-
-    # Show image
-    # inputs = inputs.cpu().detach()
-    # print(inputs)
-
-    # fig = plt.figure()
-    # idx_image = 0
-    # for row in range(4):
-    #     for col in range(4):
-    #         image_tensor = inputs[idx_image, :, :, :]
-    #         image_pil = tensor_to_pil_image(image_tensor)
-    #         print('ground_truth is dog = ' + str(ground_truth_is_dog[idx_image]))
-    #         print('predicted is dog = ' + str(predicted_is_dog[idx_image]))
-
-    #         ax = fig.add_subplot(4, 4, idx_image+1)
-    #         plt.imshow(image_pil)
-    #         ax.xaxis.set_ticklabels([])
-    #         ax.yaxis.set_ticklabels([])
-    #         ax.xaxis.set_ticks([])
-    #         ax.yaxis.set_ticks([])
-
-    #         text = 'GT '
-    #         if ground_truth_is_dog[idx_image]:
-    #             text += 'is dog'
-    #         else:
-    #             text += 'is not dog'
-
-    #         text += '\nPred '
-    #         if predicted_is_dog[idx_image]:
-    #             text += 'is dog'
-    #         else:
-    #             text += 'is not dog'
-
-    #         if ground_truth_is_dog[idx_image] == predicted_is_dog[idx_image]:
-    #             color = 'green'
-    #         else:
-    #             color = 'red'
-
-    #         ax.set_xlabel(text, color=color)
-
-    #         idx_image += 1
-
-    # plt.show()
 
 
 if __name__ == "__main__":

@@ -88,7 +88,7 @@ class Trainer():
         for epoch_idx in range(start_epoch, self.num_epochs):
             print('Starting to train epoch ' + str(epoch_idx))
 
-            # Train --------------------------------------------                #TODO   Does this train and loss computation work in non-binary scenarios??
+            # Train --------------------------------------------                
             self.model.train()
             batch_losses = []
             for batch_idx, (inputs, labels_gt) in tqdm(enumerate(self.train_loader),
