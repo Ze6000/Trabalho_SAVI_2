@@ -52,7 +52,7 @@ Para a criação deste programa, recorreu-se à utilização de algumas bibliote
   - Instalação: https://pytorch.org/get-started/locally/
    
   
-- **scikit-learn**
+- **Scikit-learn**
   - Descrição: Esta bibioteca também conhecida como sklearn permite implementar modelos de aprendizado de máquina e modelagem estatística.
   - Instalação:
     ```bash
