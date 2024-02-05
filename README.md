@@ -76,12 +76,12 @@ https://rgbd-dataset.cs.washington.edu/dataset/rgbd-dataset/
    
 4. Preparar DataSet:
 ```bash
-cd/Trabalho_Savo_2/Split_dataset
+cd/Trabalho_SAVI_2/Split_dataset
 ./main.py
 ```  
 5. Iniciar Treino: 
 ```bash
-cd/Trabalho_Savo_2/Training
+cd/Trabalho_SAVI_2/Training
 ./main.py
 ```
 Para aplicar métricas de performance, assim quer o treino terminar, executar 
