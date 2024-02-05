@@ -26,7 +26,7 @@ Vídeo ilustrativo do funcionamento do programa
 
 Para a criação deste programa, recorreu-se à utilização de algumas bibliotecas. Estas serão brevemente explicadas abaixo.
 
-- **Open3D**
+- ** Open3D **
   - Descrição: Open3D é uma biblioteca de código aberto, com a interface de software sofisticada para a implementação de dados 3D. 
   - Instalação:
     ```bash
