@@ -39,8 +39,8 @@ def main():
     validation_filenames = dataset_filenames['validation_filenames']
 
     # Reducing number os files to test code
-    # train_filenames = train_filenames[0:1000]
-    # validation_filenames = validation_filenames[0:100]
+    # train_filenames = train_filenames[0:10000]
+    # validation_filenames = validation_filenames[0:1000]
 
     print('Used ' + str(len(train_filenames)) + ' for training and ' + str(len(validation_filenames)) +
           ' for validation.')

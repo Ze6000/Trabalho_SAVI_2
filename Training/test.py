@@ -42,7 +42,6 @@ def main():
 
     test_dataset = Dataset(test_filenames)
 
-    # batch_size = len(test_filenames)
     test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
 
     # Just for testing the train_loader
@@ -76,8 +75,6 @@ def main():
     # Transform predicted labels into probabilities
     predicted_probabilities = F.softmax(labels_predicted, dim=1).tolist()
     # print(labels_gt_np)
-
-    probabilities_dog = [x[0] for x in predicted_probabilities]
 
     # Take probabilities and find the predict label
     predict_label = [sublist.index(max(sublist)) for sublist in predicted_probabilities]
