@@ -40,6 +40,7 @@ class Dataset(torch.utils.data.Dataset):
         # print(self.labels[0:15])
         # print(len(self.label_dict))
         # print(self.label_dict)
+                
         # filenames ['/home/jose/Desktop/rgbd-dataset/bowl/bowl_3/bowl_3_4_4_crop.png', '/home/jose/Desktop/rgbd-dataset/food_bag/food_bag_8/food_bag_8_4_138_crop.png']
         # labels [0, 1, 2, 2, 3, 4, 5, 6, 7, 5, 8, 9, 1, 5, 10]
         # label_dict lengh 51
