@@ -60,7 +60,7 @@ Para a criação deste programa, recorreu-se à utilização de algumas bibliote
     ```
 
 ---
-## Instalação
+## Execução
 
 O programa pode ser instalado seguindo os seguintes passos:
 
@@ -68,14 +68,25 @@ O programa pode ser instalado seguindo os seguintes passos:
 ```bash
 git clone https://github.com/ze6000/Trabalho_SAVI_2
 ```
-2. Alterar a diretória do projeto:
+2. Fazer o download do dataset
 ```bash
-cd Trabalho_SAVI_2
+[https://rgbd-dataset.cs.washington.edu/dataset/](https://rgbd-dataset.cs.washington.edu/dataset/rgbd-dataset/)
 ```
-3. Correr o programa:
+3. No ficheiro Split_dataset é necessário alterar a linha de código 18 com o path onde estam instaladas as imagens.
+   
+4. Preparar DataSet:
 ```bash
+cd/Trabalho_Savo_2/Split_dataset
+./main.py
+```  
+5. Iniciar Treino: 
+```bash
+cd/Trabalho_Savo_2/Training
 ./main.py
 ```
+Para aplicar métricas de performance, assim quer o treino termina, executar ./test.py
+
+
 
 Se os passos acima foram seguidos, o programa deve correr sem problemas.
 
