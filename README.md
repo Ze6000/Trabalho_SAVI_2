@@ -69,9 +69,9 @@ O programa pode ser instalado seguindo os seguintes passos:
 git clone https://github.com/ze6000/Trabalho_SAVI_2
 ```
 2. Fazer o download do dataset
-```bash
-[https://rgbd-dataset.cs.washington.edu/dataset/](https://rgbd-dataset.cs.washington.edu/dataset/rgbd-dataset/)
-```
+
+https://rgbd-dataset.cs.washington.edu/dataset/rgbd-dataset/
+
 3. No ficheiro Split_dataset é necessário alterar a linha de código 18 com o path onde estam instaladas as imagens.
    
 4. Preparar DataSet:
