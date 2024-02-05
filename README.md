@@ -58,7 +58,9 @@ Para a criação deste programa, recorreu-se à utilização de algumas bibliote
     ```bash
     pip install -U scikit-learn
     ```
-
+    ```bash
+    pip install more-itertools
+    ```
 ---
 ## Execução
 
