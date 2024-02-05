@@ -21,8 +21,8 @@ class Object():
     def draw_bb(self,image):  
         image[self.center] = (0,255,0)
         # cv2.circle(image, (self.center[1],self.center[0]), 20, (0,255,0), 3)
-        top_left = (self.top,self.left)
-        bottom_right = (self.bottom,self.right)
+        top_left = (self.top-15,self.left-15)
+        bottom_right = (self.bottom+15,self.right+15)
         cv2.rectangle(image, top_left, bottom_right, (0,255,0), 3)
 
 
