@@ -62,7 +62,7 @@ Para a criação deste programa, recorreu-se à utilização de algumas bibliote
 ---
 ## Execução
 
-O programa pode ser instalado seguindo os seguintes passos:
+O programa pode ser executado seguindo os seguintes passos:
 
 1. Clonar o repositório:
 ```bash
@@ -76,12 +76,12 @@ https://rgbd-dataset.cs.washington.edu/dataset/rgbd-dataset/
    
 4. Preparar DataSet:
 ```bash
-cd/Trabalho_SAVI_2/Split_dataset
+cd /Trabalho_SAVI_2/Split_dataset
 ./main.py
 ```  
 5. Iniciar Treino: 
 ```bash
-cd/Trabalho_SAVI_2/Training
+cd /Trabalho_SAVI_2/Training
 ./main.py
 ```
 Para aplicar métricas de performance, assim quer o treino terminar, executar 
