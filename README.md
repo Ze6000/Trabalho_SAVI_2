@@ -13,7 +13,7 @@ Sistemas Avançados de Visualização Industrial (SAVI) - Grupo 4 - Universidade
 
 <p align="justify"> No âmbito da Unidade Curricular de SAVI, foi criado um programa capaz de detetar objetos que se aproximem da câmera, reconhecendo em diferentes cenários. <br> </p>
 
-[Video.webm](https://github.com/joaonogueiro/TP1_SAVI/assets/114345550/8f64f7c6-c3a3-4698-b44e-39805258fb1)
+![Untitled_Project_V1](https://github.com/Ze6000/Trabalho_SAVI_2/assets/148572902/63217b2f-3220-42bf-8da6-f210ef556024)
 
 <p align="center">
 Vídeo ilustrativo do funcionamento do programa 
