@@ -11,6 +11,7 @@ from matplotlib import cm
 
 
 
+
 def ExtractImages(objects_point_clouds,scenario_point_cloud,num_scenario,objects):
     qh = QuaternionHelper()
 
@@ -152,12 +153,12 @@ def ExtractImages(objects_point_clouds,scenario_point_cloud,num_scenario,objects
                     proj_img[x,y] = 255
                 proj_img = proj_img.astype(np.uint8)
                 
-                cv2.imshow('Projected Image' + str(obj_id), proj_img)
+                # cv2.imshow('Projected Image' + str(obj_id), proj_img)
 
                 # Project objects on scene image
-                for point in points_2d:
-                    x,y = point[0]
-                    scene_gui[y,x] = [0,0,255]
+                # for point in points_2d:
+                #     x,y = point[0]
+                #     scene_gui[y,x] = [0,0,255]
 
             # ---
             # 3 - Crop objects 
@@ -178,12 +179,13 @@ def ExtractImages(objects_point_clouds,scenario_point_cloud,num_scenario,objects
                 object_img = np.zeros((objects[idx].width+20,objects[idx].hight))
                 object_img = scene[left:right,top:bottom]
                 objs_img.append(object_img)
+
                 objects[idx].getColor(object_img)
+                cv2.imwrite('Images/' + str(idx)+'_object.png',object_img)
 
 
-            
-            cv2.imshow(str(num_img) + 'Image with projected objects:', scene_gui)    
-            cv2.waitKey(0)
+            # cv2.imshow(str(num_img) + 'Image with projected objects:', scene_gui)    
+            # cv2.waitKey(0)
 
             return objs_img,scene_gui,objects
 

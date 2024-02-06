@@ -21,12 +21,18 @@ from gtts import gTTS
 import os 
 
 
+
 def main():
 
     # 1 - Get Point Cloud
 
     # Scenario number (01 to 14) - Manually
-    num_scenario = '02'
+    # 5,6,7,8,13,14 has an error
+    # 9,12 has one more object
+
+    objects = {}
+    
+    num_scenario = '03'
 
     # Get scenario point cloud
     scenario_path = 'Scenes/' + num_scenario + '.ply'
@@ -46,8 +52,8 @@ def main():
     
     # Lable objects
     lables = ['chair', 'door', 'ball','bottle','tin can'] # result from classification - list of lables in order of objects
-    for obj_idx,lable in enumerate(lables):
-        objects[obj_idx].lableling(lable,proj_scene)
+    for obj_idx,_ in enumerate(objects):
+        objects[obj_idx].lableling(lables[obj_idx],proj_scene)
         print(str(objects[obj_idx].real_h) + ' cm' )
 
     for obj_idx,obj_img in enumerate(obj_images):
@@ -85,7 +91,7 @@ def main():
 
     # Specify the full path to the MP3 file
     speech_file = 'description.mp3'
-    os.system('ffplay -v 0 -nodisp -autoexit ' + speech_file)
+    # os.system('ffplay -v 0 -nodisp -autoexit ' + speech_file)
 
 
 

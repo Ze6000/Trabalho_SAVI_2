@@ -87,7 +87,7 @@ def SeparateObjects(table_point_cloud):
         color = colormap[group_idx, 0:3]
         group_point_cloud.paint_uniform_color(color)
         # print(len(group_point_cloud.points))
-        if len(group_point_cloud.points) > 3000:
+        if len(group_point_cloud.points) > 5000:
             group_point_clouds.append(group_point_cloud)
 
     # TODO Create a class for the objects 

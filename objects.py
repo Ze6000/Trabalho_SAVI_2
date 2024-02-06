@@ -9,7 +9,31 @@ import cv2
 import webcolors 
 from ast import literal_eval
 import numpy as np
+import statistics
 
+
+COLOR_HEX_TO_NAMES = {
+    '#000000': 'Black',
+    '#FFFFFF': 'White',
+    '#FF0000': 'Red',
+    '#00FF00': 'Lime',
+    '#0000FF': 'Blue',
+    '#FFFF00': 'Yellow',
+    '#FFA500': 'Orange',
+    '#800080': 'Purple',
+    '#008080': 'Teal',
+    '#008000': 'Green',
+    '#FFC0CB': 'Pink',
+    '#808000': 'Olive',
+    '#00FFFF': 'Cyan',
+    '#800000': 'Maroon',
+    '#FF00FF': 'Magenta',
+    '#000080': 'Navy',
+    '#808080': 'Gray',
+    '#FFD700': 'Gold',
+    '#A52A2A': 'Brown',
+    '#00FF7F': 'SpringGreen'
+}
 class Object():
     
     def __init__(self,real_w_x,real_w_y,real_h):
@@ -43,7 +67,7 @@ class Object():
                 hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
                 # Define the object region (you may need to segment the object beforehand)
-                object_region = hsv_image[20:self.hight-10, 20:self.width-10]  # Example region of interest
+                object_region = hsv_image[int(self.hight/4):self.hight-int(self.hight/4),int(self.width/4):self.width-int(self.width/4)]  # Example region of interest
 
 
                 # Calculate the color histogram of the object region
@@ -57,7 +81,7 @@ class Object():
                 saturation = peak_value[1]
 
                 # Calculate the median brightness value in the object region
-                value = 1.8*np.median(object_region[:, :, 2])  # Use the V channel for brightness
+                value = 1.5*np.median(object_region[:, :, 2])  # Use the V channel for brightness
 
                 # Convert HSV to RGB
                 hsv_color = np.uint8([[[hue, saturation, value]]])
@@ -66,11 +90,12 @@ class Object():
 
                 rgb_color = literal_eval(str(tuple(rgb_color)))
 
+
                 try:
                     closest_color_name = actual_color_name = webcolors.rgb_to_name(rgb_color)
                 except ValueError:
                     min_colors = {}
-                    for key, name in webcolors.CSS2_HEX_TO_NAMES.items():
+                    for key, name in COLOR_HEX_TO_NAMES.items():
                         r_c, g_c, b_c = webcolors.hex_to_rgb(key)
                         rd = (r_c - rgb_color[0]) ** 2
                         gd = (g_c - rgb_color[1]) ** 2
