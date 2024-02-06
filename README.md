@@ -57,6 +57,10 @@ Para a criação deste programa, recorreu-se à utilização de algumas bibliote
     ```bash
     pip install -U scikit-learn
     ```
+    
+- **Intertools**
+  - Descrição: Esta bibioteca também conhecida como sklearn permite implementar modelos de aprendizado de máquina e modelagem estatística.
+  - Instalação:
     ```bash
     pip install more-itertools
     ```
