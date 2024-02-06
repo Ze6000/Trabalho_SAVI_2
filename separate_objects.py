@@ -87,7 +87,7 @@ def SeparateObjects(table_point_cloud):
         color = colormap[group_idx, 0:3]
         group_point_cloud.paint_uniform_color(color)
         print(len(group_point_cloud.points))
-        if len(group_point_cloud.points) > 2000:
+        if len(group_point_cloud.points) > 3000:
             group_point_clouds.append(group_point_cloud)
 
     # TODO Create a class for the objects 
@@ -120,22 +120,22 @@ def SeparateObjects(table_point_cloud):
 
 
 
-    # -----
-    # Visualization
-    # -----
-    frame = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
+    # # -----
+    # # Visualization
+    # # -----
+    # frame = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
 
-    entities = [point_cloud]
-    entities.append(point_cloud_table)
-    entities.extend(group_point_clouds)
+    # entities = [point_cloud]
+    # entities.append(point_cloud_table)
+    # entities.extend(group_point_clouds)
 
 
-    o3d.visualization.draw_geometries(entities,
-                                        zoom=view['trajectory'][0]['zoom'],
-                                        front=view['trajectory'][0]['front'],
-                                        lookat=view['trajectory'][0]['lookat'],
-                                        up=view['trajectory'][0]['up'],
-                                        point_show_normal = False)
+    # o3d.visualization.draw_geometries(entities,
+    #                                     zoom=view['trajectory'][0]['zoom'],
+    #                                     front=view['trajectory'][0]['front'],
+    #                                     lookat=view['trajectory'][0]['lookat'],
+    #                                     up=view['trajectory'][0]['up'],
+    #                                     point_show_normal = False)
     
     
     return group_point_clouds,objects

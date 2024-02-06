@@ -9,7 +9,10 @@ from objects import Object
 from quaternion_helper import QuaternionHelper
 from matplotlib import cm
 
-
+# from scipy.spatial import KDTree
+# from webcolors import rgb_to_name
+# from webcolors import css3_hex_to_names # cannot import this, why?
+# from webcolors import hex_to_rgb
 
 def ExtractImages(objects_point_clouds,scenario_point_cloud,num_scenario,objects):
     qh = QuaternionHelper()
@@ -100,7 +103,7 @@ def ExtractImages(objects_point_clouds,scenario_point_cloud,num_scenario,objects
 
             # Camera matrix (intrinsic)
             focal_length = 580
-            center = [w/2, h/2+15]
+            center = [w/2-5, h/2+5]
             camera_matrix = np.array([[focal_length, 0,            center[0]],
                                             [0,            focal_length, center[1]],
                                             [0,            0,            1]])
@@ -154,10 +157,10 @@ def ExtractImages(objects_point_clouds,scenario_point_cloud,num_scenario,objects
                 
                 cv2.imshow('Projected Image' + str(obj_id), proj_img)
 
-                # # Project objects on scene image
-                # for point in points_2d:
-                #     x,y = point[0]
-                #     scene_gui[y,x] = [0,0,255]
+                # Project objects on scene image
+                for point in points_2d:
+                    x,y = point[0]
+                    scene_gui[y,x] = [0,0,255]
 
             # ---
             # 3 - Crop objects 
@@ -177,36 +180,72 @@ def ExtractImages(objects_point_clouds,scenario_point_cloud,num_scenario,objects
                 bottom = objects[idx].bottom
                 object_img = np.zeros((objects[idx].width+20,objects[idx].hight))
                 object_img = scene[left:right,top:bottom]
-                r = []
-                g = []
-                b = []
 
-            # ---
-            # ERROR
-            # ---
-                for row in range(0,(objects[idx].width+20)-1):
-                    for col in range(0,(objects[idx].hight+20)-1):
-                        pixel = object_img[col,row]
-                        x,y,z = pixel
-                        r.append(x)
-                        g.append(y)
-                        b.append(z)
+                # h,w,_ = object_img.shape
 
-                r = int(sum(r)/len(r))
-                g = int(sum(g)/len(g))
-                b = int(sum(b)/len(b))
 
-                print(r,g,b)
-                exit(0)
 
-                objs_img.append(object_img)
-                # print(type(object_img))
-                # Save the image
-                # cv2.imwrite(scenes_path + str(idx)+'_object.png',object_img)
-                # print(object_img.shape)
-                # cv2.imshow('Object' + str(idx), object_img)
+
+                # # #---
+                # print(h,w)
                 
 
+                # # Convert the image to HSV color space
+                # hsv_image = cv2.cvtColor(object_img, cv2.COLOR_BGR2HSV)
+
+                # # Define the object region (you may need to segment the object beforehand)
+                # object_region = hsv_image[20:h-10, 20:w-10]  # Example region of interest
+
+
+                # # Calculate the color histogram of the object region
+                # histogram = cv2.calcHist([object_region], [0, 1], None, [180, 256], [0, 180, 0, 256])
+
+                # # Find the peak value in the histogram
+                # peak_value = np.unravel_index(histogram.argmax(), histogram.shape)
+
+                # # Convert the peak value to HSV color space
+                # hue = peak_value[0]
+                # saturation = peak_value[1]
+
+                # # Calculate the median brightness value in the object region
+                # value = np.median(object_region[:, :, 2])  # Use the V channel for brightness
+
+                # # Convert HSV to RGB
+                # hsv_color = np.uint8([[[hue, saturation, value]]])
+                # rgb_color = cv2.cvtColor(hsv_color, cv2.COLOR_HSV2BGR)[0][0]
+
+                # # Print the RGB color
+                # print("Dominant color (RGB):", rgb_color)
+
+                # # a dictionary of all the hex and their respective names in css3
+                # css3_db = css3_hex_to_names
+                # names = []
+                # rgb_values = []    
+                # for color_hex, color_name in css3_db.items():
+                #     names.append(color_name)
+                #     rgb_values.append(hex_to_rgb(color_hex))
+                
+                # kdt_db = KDTree(rgb_values)    
+                # distance, index = kdt_db.query(rgb_color)
+
+                # print('Color: ' + str(names[index]))
+
+                # # # Display the object region and its color histogram
+                # cv2.imshow('Object' + str(idx), object_region)
+                # cv2.imshow('Original' + str(idx), object_img)
+                # # cv2.imshow('Histograma' + str(idx), histogram )
+
+                # cv2.waitKey(0)
+
+
+
+                objs_img.append(object_img)
+                # # print(type(object_img))
+                # # Save the image
+                # # cv2.imwrite(scenes_path + str(idx)+'_object.png',object_img)
+                # # print(object_img.shape)
+                # # cv2.imshow('Object' + str(idx), object_img)
+                
             cv2.imshow(str(num_img) + 'Image with projected objects:', scene_gui)    
             cv2.waitKey(0)
 

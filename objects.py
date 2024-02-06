@@ -27,8 +27,8 @@ class Object():
     def draw_bb(self,image,color):  
         self.color = color
         image[self.center] = (0,255,0)
-        top_left = (self.top-15,self.left-15)
-        bottom_right = (self.bottom+15,self.right+15)
+        top_left = (self.top,self.left)
+        bottom_right = (self.bottom,self.right+5)
         cv2.rectangle(image, top_left, bottom_right, self.color, 3)
 
     def lableling(self,lable,image):

@@ -34,6 +34,7 @@ def main():
     obj_images,proj_scene,objects = ExtractImages(objects_point_clouds,scenario_point_cloud,num_scenario,objects)
 
     # Classify objects
+    
     # Lable objects
     lables = ['laranja', 'azeite', 'bola','garrafa','lata'] # result from classification - list of lables in order of objects
     for obj_idx,lable in enumerate(lables):
