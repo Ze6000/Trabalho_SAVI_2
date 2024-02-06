@@ -17,7 +17,7 @@ class Dataset(torch.utils.data.Dataset):
         # self.labels should be like ['apple', 'keyboard', 'sponge'], but we will use [0, 2, 5] because of pytorch
         self.labels = []
         self.current_label = 0
-        self.label_dict = []
+        label_dict = []
         for filename in self.filenames:
             basename = os.path.basename(filename)
             blocks = basename.split('_')
@@ -27,11 +27,11 @@ class Dataset(torch.utils.data.Dataset):
             else:
                 label = blocks[0] + ' ' + blocks[1] #because some base names are like food_can_13_1_200_crop.png
 
-            if label in self.label_dict:
-                self.labels.append( self.label_dict.index(label))
+            if label in label_dict:
+                self.labels.append(label_dict.index(label))
                 
             else:
-                self.label_dict.append(label)
+                label_dict.append(label)
                 self.labels.append(self.current_label)
                 self.current_label += 1
                 
@@ -45,7 +45,7 @@ class Dataset(torch.utils.data.Dataset):
         # labels [0, 1, 2, 2, 3, 4, 5, 6, 7, 5, 8, 9, 1, 5, 10]
         # label_dict lengh 51
         # label_dict ['bowl', 'food bag', 'orange', 'toothbrush', 'food can', 'onion', 'lightbulb', 'bell pepper', 'sponge', 'potato', 'banana', 'lemon', 'soda can', 'peach', 'food box', 'notebook', 'kleenex', 'flashlight', 'stapler', 'keyboard', 'glue stick', 'cap', 'marker', 'comb', 'instant noodles', 'lime', 'plate', 'dry battery', 'cell phone', 'toothpaste', 'food cup', 'garlic', 'apple', 'coffee mug', 'water bottle', 'hand towel', 'mushroom', 'scissors', 'pliers', 'tomato', 'food jar', 'calculator', 'pear', 'shampoo', 'rubber eraser', 'ball', 'camera', 'pitcher', 'greens', 'cereal box', 'binder']
-        # exit(0)
+        exit(0)
 
         #TODO Maybe add some other transformations to reduce overfiting
         self.transforms = transforms.Compose([      

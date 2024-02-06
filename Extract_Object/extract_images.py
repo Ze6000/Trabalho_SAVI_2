@@ -243,8 +243,9 @@ def ExtractImages(objects_point_clouds,scenario_point_cloud,num_scenario,objects
 
                 objs_img.append(object_img)
                 # # print(type(object_img))
-                # # Save the image
-                # # cv2.imwrite(scenes_path + str(idx)+'_object.png',object_img)
+
+                # Save the image
+                cv2.imwrite('Images' + str(idx) + '_object.png',object_img)
                 # # print(object_img.shape)
                 # # cv2.imshow('Object' + str(idx), object_img)
                 
