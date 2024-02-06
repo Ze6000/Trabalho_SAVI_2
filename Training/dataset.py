@@ -45,7 +45,7 @@ class Dataset(torch.utils.data.Dataset):
         # labels [0, 1, 2, 2, 3, 4, 5, 6, 7, 5, 8, 9, 1, 5, 10]
         # label_dict lengh 51
         # label_dict ['bowl', 'food bag', 'orange', 'toothbrush', 'food can', 'onion', 'lightbulb', 'bell pepper', 'sponge', 'potato', 'banana', 'lemon', 'soda can', 'peach', 'food box', 'notebook', 'kleenex', 'flashlight', 'stapler', 'keyboard', 'glue stick', 'cap', 'marker', 'comb', 'instant noodles', 'lime', 'plate', 'dry battery', 'cell phone', 'toothpaste', 'food cup', 'garlic', 'apple', 'coffee mug', 'water bottle', 'hand towel', 'mushroom', 'scissors', 'pliers', 'tomato', 'food jar', 'calculator', 'pear', 'shampoo', 'rubber eraser', 'ball', 'camera', 'pitcher', 'greens', 'cereal box', 'binder']
-        exit(0)
+        
 
         #TODO Maybe add some other transformations to reduce overfiting
         self.transforms = transforms.Compose([      
