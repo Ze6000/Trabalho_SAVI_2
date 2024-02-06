@@ -35,6 +35,7 @@ def main():
 
     # Classify objects
     
+    
     # Lable objects
     lables = ['laranja', 'azeite', 'bola','garrafa','lata'] # result from classification - list of lables in order of objects
     for obj_idx,lable in enumerate(lables):

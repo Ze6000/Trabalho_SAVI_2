@@ -230,6 +230,8 @@ def ExtractImages(objects_point_clouds,scenario_point_cloud,num_scenario,objects
 
                 # print('Color: ' + str(names[index]))
 
+                # exit(0)
+
                 # # # Display the object region and its color histogram
                 # cv2.imshow('Object' + str(idx), object_region)
                 # cv2.imshow('Original' + str(idx), object_img)
