@@ -59,7 +59,7 @@ Para a criação deste programa, recorreu-se à utilização de algumas bibliote
     ```
     
 - **Intertools**
-  - Descrição: Esta bibioteca também conhecida como sklearn permite implementar modelos de aprendizado de máquina e modelagem estatística.
+  - Descrição: A Itertools é um módulo em python, usado para iterar estruturas de dados que podem ser superadas usando um loop for.
   - Instalação:
     ```bash
     pip install more-itertools
