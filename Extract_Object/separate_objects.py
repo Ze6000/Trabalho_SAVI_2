@@ -69,7 +69,7 @@ def SeparateObjects(table_point_cloud):
     # --------------------------------------
     objects =  point_cloud_objects.cluster_dbscan(eps=0.015,
                                                     min_points=50,
-                                                    print_progress=True)
+                                                    print_progress=False)
     
     groups_idxs = list(set(objects)) # gives a list of the values in the labels list
     groups_idxs.remove(-1) # remove last group because is the group of unassigned points
@@ -86,8 +86,8 @@ def SeparateObjects(table_point_cloud):
 
         color = colormap[group_idx, 0:3]
         group_point_cloud.paint_uniform_color(color)
-        print(len(group_point_cloud.points))
-        if len(group_point_cloud.points) > 3000:
+        # print(len(group_point_cloud.points))
+        if len(group_point_cloud.points) > 5000:
             group_point_clouds.append(group_point_cloud)
 
     # TODO Create a class for the objects 

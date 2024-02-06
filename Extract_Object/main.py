@@ -25,6 +25,7 @@ from torchvision import transforms
 from model import Model
 from dataset import Dataset
 import torch.nn.functional as F
+from gtts import gTTS 
 
 
 def main():
@@ -32,23 +33,29 @@ def main():
     # 1 - Get Point Cloud
 
     # Scenario number (01 to 14) - Manually
-    num_scenario = '01'
+    print('Select scenario (01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14): ')
+    num_scenario = input()
 
     # Get scenario point cloud
     scenario_path = 'Scenes/' + num_scenario + '.ply'
     scenario_point_cloud = o3d.io.read_point_cloud(scenario_path)
 
     # Extract Table and Objects
-    table_point_cloud = Extract_table(scenario_point_cloud)
+    print('Extracting Table and Objects ...')
+    table_point_cloud,point_cloud = Extract_table(scenario_point_cloud)
+    point_cloud.paint_uniform_color([0.3,0.3,0.3])
 
     # Separate Objects
+    print('Separating objects...')
     objects_point_clouds,objects = SeparateObjects(table_point_cloud)
+    objs_pc = copy.deepcopy(objects_point_clouds)
 
     # Localizate objects in image
+    print('Finding objects in image...')
     obj_images,proj_scene,objects = ExtractImages(objects_point_clouds,scenario_point_cloud,num_scenario,objects)
 
     # Classify objects
-    
+    print('Calssifying objects...')
     
     
     #Create Model
@@ -105,20 +112,15 @@ def main():
 
 
 
-    print(predict_label)
     # print(label_dict_list)
   
     
     # Lable objects
     lables = [label_dict_list[i] for i in predict_label] # result from classification - list of lables in order of objects
-    print(lables)
 
 
-
-
-    for obj_idx,lable in enumerate(lables):
-        objects[obj_idx].lableling(lable,proj_scene)
-        print(str(objects[obj_idx].real_h) + ' cm' )
+    for obj_idx,_ in enumerate(lables):
+        objects[obj_idx].lableling(lables[obj_idx],proj_scene)
 
     for obj_idx,obj_img in enumerate(obj_images):
         cv2.imshow('Object ' + str(obj_idx),obj_img)
@@ -127,7 +129,47 @@ def main():
     cv2.waitKey(0)
 
 
+    point_clouds = [point_cloud]
+    point_clouds.extend(objs_pc)
+    o3d.visualization.draw_geometries(point_clouds)
+
     # Audio
+    print('--------')
+    intro = 'This scenario as:'
+    print(intro)
+    speech = intro
+
+    for idx,_ in enumerate(objects):
+        obj_descript = ' a ' + objects[idx].color_name + ' ' + objects[idx].lable + ' with ' + str(objects[idx].real_w_x) + ' x ' + str(objects[idx].real_w_y) + ' x ' + str(objects[idx].real_h) + ' cm'
+        print(obj_descript)
+        speech = speech + obj_descript
+    
+    print(' THE END ')
+
+
+    # Audio
+
+    # Language in which you want to convert 
+    language = 'en'
+    
+    # have a high speed 
+    myobj = gTTS(text=speech, lang=language, slow=False) 
+    
+    # Saving the converted audio in a mp3 file named 
+    # welcome  
+    myobj.save('description.mp3') 
+
+    # Specify the full path to the MP3 file
+    speech_file = 'description.mp3'
+    os.system('ffplay -v 0 -nodisp -autoexit ' + speech_file)
+
+
+
+
+    
+
+
+
 
 
 if __name__ == "__main__":

@@ -144,10 +144,10 @@ def Extract_table(scenario_point_cloud):
         # --------------------------------------
         labels =   point_cloud_horizontal.cluster_dbscan(eps=0.2,
                                                         min_points=50,
-                                                        print_progress=True)
+                                                        print_progress=False)
         
         groups_idxs = list(set(labels)) # gives a list of the values in the labels list
-        print(groups_idxs)
+        # print(groups_idxs)
         groups_idxs.remove(-1) # remove last group because is the group of unassigned points
         num_groups = len(groups_idxs)
         colormap = cm.Pastel1(range(0, num_groups))
@@ -168,7 +168,7 @@ def Extract_table(scenario_point_cloud):
         for group in group_point_clouds:
             points = group.points
             length = len(points) 
-            print(length)
+            # print(length)
 
             if length < 100:
                 continue
@@ -218,13 +218,13 @@ def Extract_table(scenario_point_cloud):
         groups_center.paint_uniform_color([0,1,0])
         min_dist = None
         for idx,center in enumerate(groups_center.points):
-            print(center)
+            # print(center)
             x,y,z = center
             fx,fy,fz = floor_center
             dist = math.sqrt((fx-x)**2 + (fy-y)**2)
             if fx-1.5 < x < fx+1.5 and fy-1.5 < y < fy+1.5 and fz+0.2 < z < fz+1:
                 if fx != x and fy != y and fz != z:
-                    print(dist)
+                    # print(dist)
                     if min_dist is None:
                         table_center=center
                         table_group = group_point_clouds[idx] 
@@ -277,7 +277,7 @@ def Extract_table(scenario_point_cloud):
         # # pcd_cropped.paint_uniform_color([1,0,0])
         # # o3d.io.write_point_cloud(point_cloud_path,pcd_cropped)
 
-        return pcd_cropped
+        return pcd_cropped,point_cloud
 
         # print('Centers')
         # print(groups_center)
