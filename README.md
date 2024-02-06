@@ -93,10 +93,18 @@ cd /Trabalho_SAVI_2/Split_dataset
 cd /Trabalho_SAVI_2/Training
 ./main.py
 ```
-Para aplicar métricas de performance, assim quer o treino terminar, executar 
+  Para aplicar métricas de performance, assim quer o treino terminar, executar 
 ```bash
 ./test.py
 ```
+6. Para iniciar o reconhecimento executar
+```bash
+  cd /Trabalho_SAVI_2/Extract_Object
+python3 main.py
+```
+
+
+   
 
 
 Se os passos acima foram seguidos, o programa deve correr sem problemas.
