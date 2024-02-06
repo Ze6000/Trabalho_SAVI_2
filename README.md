@@ -81,7 +81,7 @@ git clone https://github.com/ze6000/Trabalho_SAVI_2
 
 https://rgbd-dataset.cs.washington.edu/dataset/rgbd-dataset/
 
-3. No ficheiro Split_dataset é necessário alterar a linha de código 18 com o path onde foram instaladas as imagens.
+3. No ficheiro Split_dataset/main.py é necessário alterar a linha de código 18 com o path onde foram instaladas as imagens.
    
 4. Preparar DataSet:
 ```bash
