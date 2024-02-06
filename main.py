@@ -11,6 +11,13 @@ from separate_objects import SeparateObjects
 from extract_images import ExtractImages
 import cv2
 from objects import Object
+# Import the required module for text  
+# to speech conversion 
+from gtts import gTTS 
+  
+# This module is imported so that we can  
+# play the converted audio 
+import os 
 
 
 def main():
@@ -18,7 +25,7 @@ def main():
     # 1 - Get Point Cloud
 
     # Scenario number (01 to 14) - Manually
-    num_scenario = '01'
+    num_scenario = '02'
 
     # Get scenario point cloud
     scenario_path = 'Scenes/' + num_scenario + '.ply'
@@ -37,7 +44,7 @@ def main():
     
     
     # Lable objects
-    lables = ['laranja', 'azeite', 'bola','garrafa','lata'] # result from classification - list of lables in order of objects
+    lables = ['chair', 'door', 'ball','bottle','tin can'] # result from classification - list of lables in order of objects
     for obj_idx,lable in enumerate(lables):
         objects[obj_idx].lableling(lable,proj_scene)
         print(str(objects[obj_idx].real_h) + ' cm' )
@@ -49,7 +56,38 @@ def main():
     cv2.waitKey(0)
 
 
+    
+    print('--------')
+    intro = 'This scenario as:'
+    print(intro)
+    speech = intro
+
+    for idx,_ in enumerate(objects):
+        obj_descript = ' a ' + objects[idx].color_name + ' ' + objects[idx].lable + ' with ' + str(objects[idx].real_w_x) + ' x ' + str(objects[idx].real_w_y) + ' x ' + str(objects[idx].real_h) + ' cm'
+        print(obj_descript)
+        speech = speech + obj_descript
+    
+    print(' THE END ')
+
+
     # Audio
+
+    # Language in which you want to convert 
+    language = 'en'
+    
+    # Passing the text and language to the engine,  
+    # here we have marked slow=False. Which tells  
+    # the module that the converted audio should  
+    # have a high speed 
+    myobj = gTTS(text=speech, lang=language, slow=False) 
+    
+    # Saving the converted audio in a mp3 file named 
+    # welcome  
+    myobj.save("welcome.mp3") 
+    
+    # Playing the converted file 
+    os.system("welcome.mp3") 
+
 
 
 if __name__ == "__main__":
