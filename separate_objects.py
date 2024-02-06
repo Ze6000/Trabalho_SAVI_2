@@ -3,6 +3,8 @@ import math
 import numpy as np
 from matplotlib import cm
 from more_itertools import locate
+from objects import Object
+
 import copy
 
 view = {
@@ -42,78 +44,98 @@ class PlaneSegmentation():
         self.outliers = self.input_point_cloud.select_by_index(inlier_idxs, invert = True)
 
 
-def main():
+def SeparateObjects(table_point_cloud):
+    
+    point_cloud = table_point_cloud
 
-        scenarios = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14']
+    # --------------------------------------
+    # Downsampling
+    # --------------------------------------
 
-        for scenario in scenarios:
+
+    # Remove table plane
+    plane_model, inliers_idx = point_cloud.segment_plane(distance_threshold=0.025,
+                                        ransac_n=3,
+                                        num_iterations=100)
+    a,b,c,d = plane_model
+
+    point_cloud_table = point_cloud.select_by_index(inliers_idx, invert = False)
+    point_cloud_table.paint_uniform_color([1,0,0])
+
+    point_cloud_objects = point_cloud.select_by_index(inliers_idx, invert = True)
+    
+    # --------------------------------------
+    # Clustering
+    # --------------------------------------
+    objects =  point_cloud_objects.cluster_dbscan(eps=0.015,
+                                                    min_points=50,
+                                                    print_progress=True)
+    
+    groups_idxs = list(set(objects)) # gives a list of the values in the labels list
+    groups_idxs.remove(-1) # remove last group because is the group of unassigned points
+    num_groups = len(groups_idxs)
+    colormap = cm.Pastel1(range(0, num_groups))
+    group_point_clouds = []
+    for group_idx in groups_idxs:
+
+        group_points_idxs = list(locate(objects, lambda x: x==group_idx))
+        group_point_cloud = point_cloud_objects.select_by_index(group_points_idxs, invert = False)
         
-          point_cloud = o3d.io.read_point_cloud(scenario + '_Scenario/' + scenario +'_table_objects.ply')
+        # filename = scenario + '_Scenario/' + str(group_idx) + '_object.ply'
+        # o3d.io.write_point_cloud(filename,group_point_cloud)
 
-          # --------------------------------------
-          # Downsampling
-          # --------------------------------------
+        color = colormap[group_idx, 0:3]
+        group_point_cloud.paint_uniform_color(color)
+        print(len(group_point_cloud.points))
+        if len(group_point_cloud.points) > 2000:
+            group_point_clouds.append(group_point_cloud)
 
+    # TODO Create a class for the objects 
+    objects = {}
+    for idx,obj in enumerate(group_point_clouds):
+        x = []
+        y = []
+        z = []
 
-          # Remove table plane
-          plane_model, inliers_idx = point_cloud.segment_plane(distance_threshold=0.025,
-                                             ransac_n=3,
-                                             num_iterations=100)
-          a,b,c,d = plane_model
+        for point in obj.points:
+            a,b,c = point
+            x.append(a)
+            y.append(b)
+            z.append(c)
 
-          point_cloud_table = point_cloud.select_by_index(inliers_idx, invert = False)
-          point_cloud_table.paint_uniform_color([1,0,0])
+        minx = min(x)
+        miny = min(y)
+        minz = min(z)
+        
+        maxx = max(x)
+        maxy = max(y)
+        maxz = max(z)
 
-          point_cloud_objects = point_cloud.select_by_index(inliers_idx, invert = True)
-          
-          # --------------------------------------
-          # Clustering
-          # --------------------------------------
-          objects =  point_cloud_objects.cluster_dbscan(eps=0.02,
-                                                            min_points=50,
-                                                            print_progress=True)
-          
-          groups_idxs = list(set(objects)) # gives a list of the values in the labels list
-          groups_idxs.remove(-1) # remove last group because is the group of unassigned points
-          num_groups = len(groups_idxs)
-          colormap = cm.Pastel1(range(0, num_groups))
-          group_point_clouds = []
-          for group_idx in groups_idxs:
+        widthx = maxx-minx
+        widthy = maxy-miny
 
-               group_points_idxs = list(locate(objects, lambda x: x==group_idx))
-               group_point_cloud = point_cloud_objects.select_by_index(group_points_idxs, invert = False)
-               
-               filename = scenario + '_Scenario/' + str(group_idx) + '_object.ply'
-               o3d.io.write_point_cloud(filename,group_point_cloud)
-
-               color = colormap[group_idx, 0:3]
-               group_point_cloud.paint_uniform_color(color)
-               if len(group_point_cloud.points) > 500:
-                   group_point_clouds.append(group_point_cloud)
-
-          # TODO Create a class for the objects 
-
-          # -----
-          # Visualization
-          # -----
-          frame = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
-
-          entities = [point_cloud]
-          entities.append(point_cloud_table)
-          entities.extend(group_point_clouds)
+        hight = maxz-minz
+        objects[idx]=Object(round(widthx*100),round(widthy*100),round(hight*100))
 
 
-          o3d.visualization.draw_geometries(entities,
-                                             zoom=view['trajectory'][0]['zoom'],
-                                             front=view['trajectory'][0]['front'],
-                                             lookat=view['trajectory'][0]['lookat'],
-                                             up=view['trajectory'][0]['up'],
-                                             point_show_normal = False)
-          exit(0)
-          
 
 
- 
+    # -----
+    # Visualization
+    # -----
+    frame = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
 
-if __name__ == "__main__":
-    main()
+    entities = [point_cloud]
+    entities.append(point_cloud_table)
+    entities.extend(group_point_clouds)
+
+
+    o3d.visualization.draw_geometries(entities,
+                                        zoom=view['trajectory'][0]['zoom'],
+                                        front=view['trajectory'][0]['front'],
+                                        lookat=view['trajectory'][0]['lookat'],
+                                        up=view['trajectory'][0]['up'],
+                                        point_show_normal = False)
+    
+    
+    return group_point_clouds,objects
