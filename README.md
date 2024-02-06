@@ -5,8 +5,7 @@ Sistemas Avançados de Visualização Industrial (SAVI) - Grupo 4 - Universidade
 
 - [Introdução](#introduction)
 - [Bibliotecas Usadas](#libraries-used)
-- [Instalação](#installation)
-- [Explicação do Código](#code-explanation)
+- [Execução](#installation)
 - [Autores](#authors)
 
 ---
