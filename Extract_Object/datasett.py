@@ -7,7 +7,7 @@ from torchvision import transforms
 from PIL import Image
 
 
-class Dataset(torch.utils.data.Dataset):
+class Datasett(torch.utils.data.Dataset):
 
     def __init__(self, filenames):
         self.filenames = filenames

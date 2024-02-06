@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 
+import json
 import open3d as o3d
 import math
 import numpy as np
@@ -13,15 +14,16 @@ from separate_objects import SeparateObjects
 from extract_images import ExtractImages
 import cv2
 from objects import Object
+from datasett import Datasett
 
 import os
 import sys
 sys.path.append('../Training') 
 import glob
-from dataset import Dataset
 import torch
 from torchvision import transforms
 from model import Model
+from dataset import Dataset
 import torch.nn.functional as F
 
 
@@ -58,15 +60,15 @@ def main():
     # -----------------------------------------------------------------
     data_path = 'Images'                   
     test_filenames = glob.glob(os.path.join(data_path, '*.*'))
-    test_dataset = Dataset(test_filenames)
-    test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=(len(test_filenames)), shuffle=True)
+    test_dataset = Datasett(test_filenames)
+    test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=(len(test_filenames)), shuffle=False)
 
     # -----------------------------------------------------------------
     # Prediction
     # -----------------------------------------------------------------
 
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-    print('Por enquanto tudo bem')
+
 
     # Load the trained model
     checkpoint = torch.load('../Training/models/checkpoint.pkl')
@@ -91,14 +93,29 @@ def main():
     predict_label = [sublist.index(max(sublist)) for sublist in predicted_probabilities]
     # print(predict_label)
     # print(len(predict_label))
-    label_dict = Dataset.label_dict
-    print(predict_label)
-    print(label_dict)
     
+
+    with open('../Split_dataset/dataset_filenames.json', 'r') as f:
+        # Reading from json file
+        dataset_filenames = json.load(f)
+
+    train_filenames = dataset_filenames['train_filenames']
+    dataset_instance = Dataset(train_filenames)
+    label_dict_list = dataset_instance.label_dict
+
+
+
+    print(predict_label)
+    # print(label_dict_list)
+  
     
     # Lable objects
-    lables = [label_dict[i] for i in predict_label] # result from classification - list of lables in order of objects
-    
+    lables = [label_dict_list[i] for i in predict_label] # result from classification - list of lables in order of objects
+    print(lables)
+
+
+
+
     for obj_idx,lable in enumerate(lables):
         objects[obj_idx].lableling(lable,proj_scene)
         print(str(objects[obj_idx].real_h) + ' cm' )
