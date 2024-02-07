@@ -5,8 +5,6 @@ from matplotlib import cm
 from more_itertools import locate
 from objects import Object
 
-import copy
-
 view = {
 	"class_name" : "ViewTrajectory",
 	"interval" : 29,
@@ -46,33 +44,30 @@ class PlaneSegmentation():
 
 def SeparateObjects(table_point_cloud):
     
+    # Getthe point cloud of the table and objects extracted before 
     point_cloud = table_point_cloud
 
-    # --------------------------------------
-    # Downsampling
-    # --------------------------------------
-
-
+    
     # Remove table plane
     plane_model, inliers_idx = point_cloud.segment_plane(distance_threshold=0.025,
                                         ransac_n=3,
                                         num_iterations=100)
     a,b,c,d = plane_model
 
+    # Table's point cloud
     point_cloud_table = point_cloud.select_by_index(inliers_idx, invert = False)
     point_cloud_table.paint_uniform_color([1,0,0])
 
+    # Objects' point cloud
     point_cloud_objects = point_cloud.select_by_index(inliers_idx, invert = True)
     
-    # --------------------------------------
-    # Clustering
-    # --------------------------------------
+    # Find each separated object
     objects =  point_cloud_objects.cluster_dbscan(eps=0.015,
                                                     min_points=50,
                                                     print_progress=False)
     
-    groups_idxs = list(set(objects)) # gives a list of the values in the labels list
-    groups_idxs.remove(-1) # remove last group because is the group of unassigned points
+    groups_idxs = list(set(objects)) 
+    groups_idxs.remove(-1) 
     num_groups = len(groups_idxs)
     colormap = cm.Pastel1(range(0, num_groups))
     group_point_clouds = []
@@ -80,17 +75,15 @@ def SeparateObjects(table_point_cloud):
 
         group_points_idxs = list(locate(objects, lambda x: x==group_idx))
         group_point_cloud = point_cloud_objects.select_by_index(group_points_idxs, invert = False)
-        
-        # filename = scenario + '_Scenario/' + str(group_idx) + '_object.ply'
-        # o3d.io.write_point_cloud(filename,group_point_cloud)
 
         color = colormap[group_idx, 0:3]
         group_point_cloud.paint_uniform_color(color)
-        # print(len(group_point_cloud.points))
-        if len(group_point_cloud.points) > 5000:
+        print(len(group_point_cloud.points))
+        if len(group_point_cloud.points) > 5000: # Ignore very small objects (it's just noise or pieces of table)
             group_point_clouds.append(group_point_cloud)
 
-    # TODO Create a class for the objects 
+    # Now that the objects are separated, get their dimensions and save the data
+    
     objects = {}
     for idx,obj in enumerate(group_point_clouds):
         x = []
@@ -115,27 +108,8 @@ def SeparateObjects(table_point_cloud):
         widthy = maxy-miny
 
         hight = maxz-minz
+
+        # Save object width in x and y axis and hight
         objects[idx]=Object(round(widthx*100),round(widthy*100),round(hight*100))
-
-
-
-
-    # # -----
-    # # Visualization
-    # # -----
-    # frame = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
-
-    # entities = [point_cloud]
-    # entities.append(point_cloud_table)
-    # entities.extend(group_point_clouds)
-
-
-    # o3d.visualization.draw_geometries(entities,
-    #                                     zoom=view['trajectory'][0]['zoom'],
-    #                                     front=view['trajectory'][0]['front'],
-    #                                     lookat=view['trajectory'][0]['lookat'],
-    #                                     up=view['trajectory'][0]['up'],
-    #                                     point_show_normal = False)
-    
     
     return group_point_clouds,objects
