@@ -163,8 +163,6 @@ def ExtractImages(objects_point_clouds,scenario_point_cloud,num_scenario,objects
 
                     proj_img[x,y] = 255
                 proj_img = proj_img.astype(np.uint8)
-                cv2.imshow('proj_img' + str(obj_id),proj_img)
-                cv2.waitKey()
 
 
 

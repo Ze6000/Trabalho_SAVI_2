@@ -196,5 +196,5 @@ def main():
             isRunning = False
 
 
-    if __name__ == "__main__":
-        main()
+if __name__ == "__main__":
+    main()
