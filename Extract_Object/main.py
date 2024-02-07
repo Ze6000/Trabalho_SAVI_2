@@ -50,7 +50,7 @@ def main():
             ''')
 
         # Scenario number (01 to 14) - Manually
-        print('Select scenario (01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14): ')
+        print('Select scenario (01, 02, 03, 04, 09, 10, 11, 12): ')
         num_scenario = input()
 
         # Get scenario point cloud
@@ -137,31 +137,43 @@ def main():
         # Lable objects
         lables = [label_dict_list[i] for i in predict_label] # result from classification - list of lables in order of objects
 
-
+        num_objs = 0
         for obj_idx,_ in enumerate(lables):
             objects[obj_idx].lableling(lables[obj_idx],proj_scene)
+            num_objs += 1
 
         # -----------------------------------------------------------------
         # Visualization
         # -----------------------------------------------------------------
         
+        point_clouds = [point_cloud]
+        point_clouds.extend(objs_pc)
+        o3d.visualization.draw_geometries(point_clouds)
+
+        objects_gallery = np.zeros((200,num_objs*150,3), dtype=np.uint8)
+        objects_gallery.fill(255)
+        
         # Show each object
         for idx,obj in enumerate(obj_images):
-            cv2.imshow('Object ' + str(idx+1) + ':' + objects[idx].lable,obj)
+            obj = cv2.resize(obj,(100,100))
+            start = int(25+150*idx)
+            end = int(125+150*idx)
+            objects_gallery[25:125,start:end,:]=obj
+            cv2.putText(objects_gallery,objects[idx].lable,(start,15),cv2.FONT_HERSHEY_SIMPLEX,0.7, (200,0,0), 1, cv2.LINE_AA)
+        
+        cv2.putText(objects_gallery,'This scenario has ' + str(num_objs) + ' objects',(25,150),cv2.FONT_HERSHEY_SIMPLEX,0.7, (255,0,0), 1, cv2.LINE_AA)
+        cv2.imshow('Objects',objects_gallery)
 
 
         cv2.imshow('Scene' + str(num_scenario),proj_scene)
         cv2.waitKey(0)
 
-        point_clouds = [point_cloud]
-        point_clouds.extend(objs_pc)
-        o3d.visualization.draw_geometries(point_clouds)
-
+    
         # ----
         # Scenario description 
         # ----
         print('--------')
-        intro = 'This scenario as:'
+        intro = 'This scenario has:'
         print(intro)
         speech = intro
 
@@ -187,6 +199,15 @@ def main():
         # Specify the full path to the MP3 file
         speech_file = 'description.mp3'
         os.system('ffplay -v 0 -nodisp -autoexit ' + speech_file)
+
+        print('So, how many garlics did you find?')
+
+        garlics_found = input()
+
+        if garlics_found == '0':
+            print('Oh, sorry :(. Better luck next time!')
+        else:
+            print('Wow, so many?! You are so lucky!')
 
         print('Do you wish to see another scenario? (y/n)')
         ans = input()
