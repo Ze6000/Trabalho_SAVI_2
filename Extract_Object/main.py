@@ -57,8 +57,6 @@ def main():
         scenario_path = 'Scenes/' + num_scenario + '.ply'
         scenario_point_cloud = o3d.io.read_point_cloud(scenario_path)
 
-
-
         # Extract Table and Objects
         print('Extracting Table and Objects ...')
         table_point_cloud,point_cloud = Extract_table(scenario_point_cloud)
@@ -206,8 +204,12 @@ def main():
 
         if garlics_found == '0':
             print('Oh, sorry :(. Better luck next time!')
-        else:
+        elif garlics_found == '4' or garlics_found == '5':
+            print("It's the garlic revolution!!!")
+        else:           
             print('Wow, so many?! You are so lucky!')
+
+
 
         print('Do you wish to see another scenario? (y/n)')
         ans = input()

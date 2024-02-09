@@ -238,7 +238,7 @@ def Extract_table(scenario_point_cloud):
     min_sx =  x - 0.6
     min_sy = y - 0.6
     sz_top = z + 0.5
-    sz_bottom = z - 0.05
+    sz_bottom = z - 0.03
     np_vertices[0, 0:3] = [max_sx, max_sy, sz_top]
     np_vertices[1, 0:3] = [max_sx, min_sy, sz_top]
     np_vertices[2, 0:3] = [min_sx, min_sy, sz_top]
