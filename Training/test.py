@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 
-
 import json
+import os
+import sys
 from sklearn.model_selection import train_test_split
 from dataset import Dataset
 import torch
@@ -13,12 +14,15 @@ from model import Model
 import torch.nn.functional as F
 
 
+
 def main():
 
     # -----------------------------------------------------------------
     # Hyperparameters initialization
     # -----------------------------------------------------------------
     batch_size = 500
+    n_classes = 51
+
     # -----------------------------------------------------------------
     # Create model
     # -----------------------------------------------------------------
@@ -76,7 +80,7 @@ def main():
 
 
     # Creat a classification matrix
-    result_matrix = np.zeros((51,51))
+    result_matrix = np.zeros((n_classes,n_classes))
     for col, line in zip(predict_label, labels_gt_np):
         result_matrix[line][col] += 1
     

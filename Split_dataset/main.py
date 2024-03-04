@@ -17,7 +17,7 @@ def main():
     # -----------------------------------------------------------------
     data_path = '/home/jose/Desktop/rgbd-dataset/'                    
     files1 = os.listdir(data_path)
-    #print(len(files1))
+    
     n_classes = 51 
     image_filenames = []
 
