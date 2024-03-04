@@ -1,6 +1,13 @@
 # TP2- Detetor de Objetos
 Sistemas Avançados de Visualização Industrial (SAVI) - Grupo 4 - Universidade de Aveiro - 2023/24
 
+
+<h3 align="center">Wait it's all Garlic? </h3>
+
+<div align="center">
+  <img width="500" alt="Captura de ecrã 2024-02-06, às 16 46 47" src="https://github.com/Ze6000/Trabalho_SAVI_2/assets/148572902/2fd3798c-c4d6-4f92-9f76-e05f619008ee">
+</div> 
+
 ## Índice
 
 - [Introdução](#introduction)
@@ -13,11 +20,8 @@ Sistemas Avançados de Visualização Industrial (SAVI) - Grupo 4 - Universidade
 
 <p align="justify"> No âmbito da Unidade Curricular de SAVI, foi criado um programa capaz de detetar objetos que se aproximem da câmera, reconhecendo em diferentes cenários. <br> </p>
 
-[Video.webm](https://github.com/joaonogueiro/TP1_SAVI/assets/114345550/8f64f7c6-c3a3-4698-b44e-39805258fb1)
 
-<p align="center">
-Vídeo ilustrativo do funcionamento do programa 
-</p>
+
 
 
 ---
@@ -77,7 +81,7 @@ git clone https://github.com/ze6000/Trabalho_SAVI_2
 
 https://rgbd-dataset.cs.washington.edu/dataset/rgbd-dataset/
 
-3. No ficheiro Split_dataset é necessário alterar a linha de código 18 com o path onde foram instaladas as imagens.
+3. No ficheiro Split_dataset/main.py é necessário alterar a linha de código 18 com o path onde foram instaladas as imagens.
    
 4. Preparar DataSet:
 ```bash
@@ -89,10 +93,18 @@ cd /Trabalho_SAVI_2/Split_dataset
 cd /Trabalho_SAVI_2/Training
 ./main.py
 ```
-Para aplicar métricas de performance, assim quer o treino terminar, executar 
+  Para aplicar métricas de performance, assim quer o treino terminar, executar 
 ```bash
 ./test.py
 ```
+6. Para iniciar o reconhecimento executar
+```bash
+  cd /Trabalho_SAVI_2/Extract_Object
+python3 main.py
+```
+
+
+   
 
 
 Se os passos acima foram seguidos, o programa deve correr sem problemas.

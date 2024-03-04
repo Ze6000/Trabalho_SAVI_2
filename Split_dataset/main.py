@@ -38,7 +38,12 @@ def main():
     # Use 70% train, 20% validation and 10% for testing and metric performance
     train_filenames, remaining_filenames = train_test_split(image_filenames, test_size=0.3)
     validation_filenames, test_filenames = train_test_split(remaining_filenames, test_size=0.33)
+    train_files = sorted(train_files)
+    validation_files = sorted(validation_files)
+    test_files = sorted(test_files)
 
+
+    
     #Code to make sure there's one of each class in every dataset
     label_dict_train = []
     label_train = []
@@ -79,7 +84,11 @@ def main():
     if len(label_dict_validation) != n_classes:
         print('Error! Found only' + str(len(label_dict_validation)) + 'Classes for the trainning dataset')
         exit(0)
- 
+
+    #Sort the files so the labels apper in the correct order later while training
+    train_files = sorted(train_files)
+    validation_files = sorted(validation_files)
+    test_files = sorted(test_files)
 
 
     print('We have a total of ' + str(len(image_filenames)) + ' images.')
